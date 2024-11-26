@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Tooltip } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link, useNavigate } from "react-router-dom";
-import PaginationComponent from "../../../Components/PaginationComponent";
-import patientService from "../../../Services/patientService";
+import PaginationComponent from "../../Components/PaginationComponent";
+import patientService from "../../Services/patientService";
 import toast from 'react-hot-toast';
 
 const AdminPatients = () => {

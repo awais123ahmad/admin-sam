@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import logo from "../assets/logo.png";
 
-import { FaFirstAid, FaUserInjured } from 'react-icons/fa';
+import { FaFirstAid, FaUserInjured } from "react-icons/fa";
 
 import { Popover, Transition } from "@headlessui/react";
 
@@ -277,225 +277,8 @@ export default function PortalLayout({ children }) {
               </div>
 
               <div className="px-4">
-                <div
-                  onClick={() => route("/")}
-                  className={`flex items-center p-2 cursor-pointer  text-gray-600 mt-3 h-[2.6rem] ${
-                    location.pathname === "/"
-                      ? "bg-gray-800 text-white mr-2 rounded-md font-[600]"
-                      : " mr-2 rounded-md"
-                  }`}
-                >
-                  <SpaceDashboardIcon
-                    className={`!text-5xl ${
-                      open ? "mr-4" : "mr-auto ml-2 hover:!text-[3.5rem]"
-                    } rounded-full p-[12px] ml-[-1.2rem] ${
-                      location.pathname === "/" ? "bg-white text-gray-600" : ""
-                    } `}
-                    sx={{
-                      boxShadow:
-                        location.pathname === "/"
-                          ? "2px 5px 10px rgba(0, 0, 0, 0.2)"
-                          : "",
-                    }}
-                  />
-                  <span
-                    className={`flex-1 font-[600] text-left ml-[2px] text-[14px] ${
-                      !open ? "hidden" : "block"
-                    }`}
-                  >
-                    Dashboard
-                  </span>
-                </div>
-                
-                <div
-                  class
-                  onClick={() => handleSelection(0)}
-                  className={`flex items-center p-2 cursor-pointer  text-gray-600 mt-3 h-[2.6rem]`}
-                >
-                  <FaUserInjured
-                    className={`!text-5xl ${
-                      open ? "mr-4" : "mr-auto ml-2 hover:!text-[3.5rem]"
-                    } rounded-full p-[12px] ml-[-1.2rem]`}
-                  />
-                  <span
-                    className={`flex-1 font-[600] text-left ml-[2px] text-[14px] ${
-                      !open ? "hidden" : "block"
-                    }`}
-                  >
-                    Patients
-                  </span>
-                  <IoIosArrowDown
-                    className={`w-4 h-4 ${
-                      open1[0]
-                        ? "-rotate-180 duration-300"
-                        : "rotate-0 duration-300"
-                    }   ${!open ? "hidden" : "block"}  `}
-                  />
-                </div>
-                <ul className={`${open1[0] ? "" : "hidden"} w-[100%]`}>
-                  
-                  <li>
-                    <div
-                      onClick={() => route("/patient/patientdashboard")}
-                      className={`flex items-center p-2 cursor-pointer  text-gray-600 mt-3 h-[2.6rem] ${
-                        location.pathname === "/patient/patientdashboard" ||
-                        location.pathname === "/patient/patientdashboard/add"
-                          ? "bg-gray-800 text-white mr-2 rounded-md font-[600]"
-                          : " mr-2 rounded-md"
-                      }  ${open ? "ml-6" : "ml-0"}  `}
-                    >
-                      <SpaceDashboardIcon
-                        className={`!text-5xl ${
-                          open ? "mr-4" : "mr-auto ml-2 hover:!text-[3.5rem]"
-                        } rounded-full p-[12px] ml-[-1.2rem] ${
-                          location.pathname === "/patient/patientdashboard"
-                            ? "bg-white text-gray-600"
-                            : ""
-                        } `}
-                        sx={{
-                          boxShadow:
-                            location.pathname === "/patient/patientdashboard"
-                              ? "2px 5px 10px rgba(0, 0, 0, 0.2)"
-                              : "",
-                        }}
-                      />
-                      <span
-                        className={`flex-1 font-[600]  text-left ml-[2px] text-[13px] ${
-                          !open ? "hidden" : "block"
-                        }`}
-                      >
-                        Patient Dashboard
-                      </span>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div
-                      onClick={() => route("/patient/patients")}
-                      className={`flex items-center p-2 cursor-pointer  text-gray-600 mt-3 h-[2.6rem] ${
-                        location.pathname === "/patient/patients" ||
-                        location.pathname === "/patient/patients/add"
-                          ? "bg-gray-800 text-white mr-2 rounded-md font-[600]"
-                          : " mr-2 rounded-md"
-                      }  ${open ? "ml-6" : "ml-0"}  `}
-                    >
-                      <Inventory2Icon
-                        className={`!text-5xl ${
-                          open ? "mr-4" : "mr-auto ml-2 hover:!text-[3.5rem]"
-                        } rounded-full p-[12px] ml-[-1.2rem] ${
-                          location.pathname === "/patient/patients"
-                            ? "bg-white text-gray-600"
-                            : ""
-                        } `}
-                        sx={{
-                          boxShadow:
-                            location.pathname === "/patient/patients"
-                              ? "2px 5px 10px rgba(0, 0, 0, 0.2)"
-                              : "",
-                        }}
-                      />
-                      <span
-                        className={`flex-1 font-[600]  text-left ml-[2px] text-[13px] ${
-                          !open ? "hidden" : "block"
-                        }`}
-                      >
-                        Patients
-                      </span>
-                    </div>
-                  </li>
-       
-                </ul>
-
-                <div
-                  onClick={() => handleSelection(1)}
-                  className={`flex items-center p-2 cursor-pointer  text-gray-600 mt-3 h-[2.6rem]`}
-                >
-                  <BadgeIcon
-                    className={`!text-5xl ${
-                      open ? "mr-4" : "mr-auto ml-2 hover:!text-[3.5rem]"
-                    } rounded-full p-[12px] ml-[-1.2rem]`}
-                  />
-                  <span
-                    className={`flex-1 font-[600] text-left ml-[2px] text-[14px] ${
-                      !open ? "hidden" : "block"
-                    }`}
-                  >
-                    Dispensaries
-                  </span>
-                  <IoIosArrowDown
-                    className={`w-4 h-4 ${
-                      open1[1]
-                        ? "-rotate-180 duration-300"
-                        : "rotate-0 duration-300"
-                    }   ${!open ? "hidden" : "block"}  `}
-                  />
-                </div>
-
-                <ul className={`${open1[1] ? "" : "hidden"} w-[100%]`}>
-                  <li>
-                    <div
-                      onClick={() => route("/dispensaries/dispensary")}
-                      className={`flex items-center p-2 cursor-pointer  text-gray-600 mt-3 h-[2.6rem] ${
-                        location.pathname === "/dispensaries/dispensary"
-                          ? "bg-gray-800 text-white mr-2 rounded-md font-[600]"
-                          : " mr-2 rounded-md"
-                      }  ${open ? "ml-6" : "ml-0"}  `}
-                    >
-                      <Inventory2Icon
-                        className={`!text-5xl ${
-                          open ? "mr-4" : "mr-auto ml-2 hover:!text-[3.5rem]"
-                        } rounded-full p-[12px] ml-[-1.2rem] ${
-                          location.pathname === "/dispensaries/dispensary"
-                            ? "bg-white text-gray-600"
-                            : ""
-                        } `}
-                        sx={{
-                          boxShadow:
-                            location.pathname === "/dispensaries/dispensary"
-                              ? "2px 5px 10px rgba(0, 0, 0, 0.2)"
-                              : "",
-                        }}
-                      />
-                      <span
-                        className={`flex-1 font-[600]  text-left ml-[2px] text-[13px] ${
-                          !open ? "hidden" : "block"
-                        }`}
-                      >
-                        Medical Store
-                      </span>
-                    </div>
-                  </li>
-                  
-                </ul>
-
-                <div
-                  onClick={() => handleSelection(3)}
-                  className={`flex items-center p-2 cursor-pointer  text-gray-600 mt-3 h-[2.6rem]`}
-                >
-                  <AccountCircleIcon
-                    className={`!text-5xl ${
-                      open ? "mr-4" : "mr-auto ml-2 hover:!text-[3.5rem]"
-                    } rounded-full p-[12px] ml-[-1.2rem]`}
-                  />
-                  <span
-                    className={`flex-1 font-[600] text-left ml-[2px] text-[14px] ${
-                      !open ? "hidden" : "block"
-                    }`}
-                  >
-                    Admin
-                  </span>
-
-                  <IoIosArrowDown
-                    className={`w-4 h-4 ${
-                      open1[3]
-                        ? "-rotate-180 duration-300"
-                        : "rotate-0 duration-300"
-                    }   ${!open ? "hidden" : "block"}  `}
-                  />
-                </div>
-                
+    
                 <ul className={`${open1[3] ? "" : "hidden"} w-[100%]`}>
-
                   <li>
                     <div
                       onClick={() => route("/admin/admindasboard")}
@@ -526,7 +309,7 @@ export default function PortalLayout({ children }) {
                           !open ? "hidden" : "block"
                         }`}
                       >
-                        Admin Dashboard
+                        Dashboard
                       </span>
                     </div>
                   </li>
@@ -665,7 +448,7 @@ export default function PortalLayout({ children }) {
                           !open ? "hidden" : "block"
                         }`}
                       >
-                         Patients
+                        Patients
                       </span>
                     </div>
                   </li>
@@ -704,142 +487,8 @@ export default function PortalLayout({ children }) {
                       </span>
                     </div>
                   </li>
-                  
-                </ul> 
-              
-                <div
-                  onClick={() => handleSelection(4)}
-                  className={`flex items-center p-2 cursor-pointer  text-gray-600 mt-3 h-[2.6rem]`}
-                >
-                  <AccountCircleIcon
-                    className={`!text-5xl ${
-                      open ? "mr-4" : "mr-auto ml-2 hover:!text-[3.5rem]"
-                    } rounded-full p-[12px] ml-[-1.2rem]`}
-                  />
-                  <span
-                    className={`flex-1 font-[600] text-left ml-[2px] text-[14px] ${
-                      !open ? "hidden" : "block"
-                    }`}
-                  >
-                    Account
-                  </span>
+                </ul>
 
-                  <IoIosArrowDown
-                    className={`w-4 h-4 ${
-                      open1[4]
-                        ? "-rotate-180 duration-300"
-                        : "rotate-0 duration-300"
-                    }   ${!open ? "hidden" : "block"}  `}
-                  />
-                </div>
-
-                <ul className={`${open1[4] ? "" : "hidden"} w-[100%]`}>
-
-                  <li>
-                    <div
-                      onClick={() => route("/account/purchasemedicine")}
-                      className={`flex items-center p-2 cursor-pointer  text-gray-600 mt-3 h-[2.6rem] ${
-                        location.pathname === "/account/purchasemedicine" ||
-                        location.pathname === "/account/purchasemedicine/add"
-                          ? "bg-gray-800 text-white mr-2 rounded-md font-[600]"
-                          : " mr-2 rounded-md"
-                      }  ${open ? "ml-6" : "ml-0"}  `}
-                    >
-                      <Inventory2Icon
-                        className={`!text-5xl ${
-                          open ? "mr-4" : "mr-auto ml-2 hover:!text-[3.5rem]"
-                        } rounded-full p-[12px] ml-[-1.2rem] ${
-                          location.pathname === "/account/purchasemedicine"
-                            ? "bg-white text-gray-600"
-                            : ""
-                        } `}
-                        sx={{
-                          boxShadow:
-                            location.pathname === "/account/purchasemedicine"
-                              ? "2px 5px 10px rgba(0, 0, 0, 0.2)"
-                              : "",
-                        }}
-                      />
-                      <span
-                        className={`flex-1 font-[600]  text-left ml-[2px] text-[13px] ${
-                          !open ? "hidden" : "block"
-                        }`}
-                      >
-                        Purchase Medicine
-                      </span>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div
-                      onClick={() => route("/account/income")}
-                      className={`flex items-center p-2 cursor-pointer  text-gray-600 mt-3 h-[2.6rem] ${
-                        location.pathname === "/account/income" ||
-                        location.pathname === "/account/income/add"
-                          ? "bg-gray-800 text-white mr-2 rounded-md font-[600]"
-                          : " mr-2 rounded-md"
-                      }  ${open ? "ml-6" : "ml-0"}  `}
-                    >
-                      <CleanHandsIcon
-                        className={`!text-5xl ${
-                          open ? "mr-4" : "mr-auto ml-2 hover:!text-[3.5rem]"
-                        } rounded-full p-[12px] ml-[-1.2rem] ${
-                          location.pathname === "/account/income"
-                            ? "bg-white text-gray-600"
-                            : ""
-                        } `}
-                        sx={{
-                          boxShadow:
-                            location.pathname === "/account/income"
-                              ? "2px 5px 10px rgba(0, 0, 0, 0.2)"
-                              : "",
-                        }}
-                      />
-                      <span
-                        className={`flex-1 font-[600]  text-left ml-[2px] text-[13px] ${
-                          !open ? "hidden" : "block"
-                        }`}
-                      >
-                        Income
-                      </span>
-                    </div>
-                  </li>
-                  <li>
-                    <div
-                      onClick={() => route("/account/expense")}
-                      className={`flex items-center p-2 cursor-pointer  text-gray-600 mt-3 h-[2.6rem] ${
-                        location.pathname === "/account/expense" ||
-                        location.pathname === "/account/expense/add"
-                          ? "bg-gray-800 text-white mr-2 rounded-md font-[600]"
-                          : " mr-2 rounded-md"
-                      }  ${open ? "ml-6" : "ml-0"}  `}
-                    >
-                      <PaidIcon
-                        className={`!text-5xl ${
-                          open ? "mr-4" : "mr-auto ml-2 hover:!text-[3.5rem]"
-                        } rounded-full p-[12px] ml-[-1.2rem] ${
-                          location.pathname === "/account/expense"
-                            ? "bg-white text-gray-600"
-                            : ""
-                        } `}
-                        sx={{
-                          boxShadow:
-                            location.pathname === "/account/expense"
-                              ? "2px 5px 10px rgba(0, 0, 0, 0.2)"
-                              : "",
-                        }}
-                      />
-                      <span
-                        className={`flex-1 font-[600]  text-left ml-[2px] text-[13px] ${
-                          !open ? "hidden" : "block"
-                        }`}
-                      >
-                        Expense
-                      </span>
-                    </div>
-                  </li>
-                  
-                </ul> 
               </div>
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 0 }}>
