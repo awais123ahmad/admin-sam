@@ -9,17 +9,17 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import patientService from "../../../Services/patientService";
+import patientService from "../../Services/patientService";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
-import doctorService from "../../../Services/doctorService";
-import userService from "../../../Services/userService";
+import doctorService from "../../Services/doctorService";
+import dispenserService from "../../Services/dispenserService";
+import adminService from "../../Services/adminService";
 
 const AddEditUsers = () => {
   const [patientData, setPatientData] = useState({
     name: "",
     email: "",
-    role: "",
     password: "",
   });
 
@@ -66,11 +66,11 @@ const AddEditUsers = () => {
     e.preventDefault();
     try {
       if (id) {
-        await userService.update(id, patientData);
-        toast.success("User updated successfully!");
+        await adminService.update(patientData);
+        toast.success("Admin updated successfully!");
       } else {
-        await userService.create(patientData);
-        toast.success("User added successfully!");
+        await adminService.register(patientData);
+        toast.success("Admin added successfully!");
       }
       navigate("/patients");
     } catch (error) {
@@ -81,7 +81,7 @@ const AddEditUsers = () => {
   return (
     <form onSubmit={handleSubmit} className="w-[90%] m-auto">
       <h1 className="m-[30px] text-center font-[700] text-[20px]">
-        {id ? "Edit User" : "Add User"}
+        {id ? "Edit Admin" : "Add An Admin"}
       </h1>
       <Divider />
       <div>
@@ -111,25 +111,7 @@ const AddEditUsers = () => {
         </div>
 
         <div className="mt-[20px] flex">
-          <div>
-            <FormControl fullWidth>
-              <InputLabel>Role</InputLabel>
-              <Select
-                label="Role"
-                name="role"
-                value={patientData.role} // Set the selected role
-                onChange={handleChange}
-                required
-              >
-                <MenuItem value="admin">Admin</MenuItem>
-                <MenuItem value="accountant">Accountant</MenuItem>
-                <MenuItem value="receptionist">Receptionist</MenuItem>
-                <MenuItem value="dispenser">Dispenser</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-
-          <div style={{ marginLeft: 20, width: "50%" }}>
+        <div style={{ width: "50%" }}>
             <TextField
               label="Password"
               variant="outlined"
@@ -143,6 +125,7 @@ const AddEditUsers = () => {
           </div>
         </div>
 
+     
         <Grid container style={{ justifyContent: "center", marginTop: "30px" }}>
           <Button
             variant="contained"

@@ -13,17 +13,14 @@ import patientService from "../../Services/patientService";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import doctorService from "../../Services/doctorService";
+import dispenserService from "../../Services/dispenserService";
+import hrService from "../../Services/hrService";
 
-const AddEditDoctors = () => {
+const AddEditHR = () => {
   const [patientData, setPatientData] = useState({
     name: "",
-    specialization: "",
-    phone_no: "",
-    cnic: "",
     email: "",
-    qualification: "",
-    pay: "",
-    experience: "",
+    password: "",
   });
 
   const [doctorData, setDoctorData] = useState([]);
@@ -69,11 +66,11 @@ const AddEditDoctors = () => {
     e.preventDefault();
     try {
       if (id) {
-        await doctorService.update(id, patientData);
-        toast.success("Doctor updated successfully!");
+        await hrService.update(patientData);
+        toast.success("User updated successfully!");
       } else {
-        await doctorService.create(patientData);
-        toast.success("Doctor added successfully!");
+        await hrService.register(patientData);
+        toast.success("User added successfully!");
       }
       navigate("/patients");
     } catch (error) {
@@ -84,14 +81,14 @@ const AddEditDoctors = () => {
   return (
     <form onSubmit={handleSubmit} className="w-[90%] m-auto">
       <h1 className="m-[30px] text-center font-[700] text-[20px]">
-        {id ? "Edit Doctor" : "Add Doctor"}
+        {id ? "Edit HR" : "Add HR"}
       </h1>
       <Divider />
       <div>
         <div className="mt-[20px] flex">
           <div style={{ width: "50%" }}>
             <TextField
-              label="Doctor Name"
+              label="Name"
               variant="outlined"
               fullWidth
               name="name"
@@ -102,46 +99,6 @@ const AddEditDoctors = () => {
           </div>
           <div style={{ marginLeft: 20, width: "50%" }}>
             <TextField
-              label="Specialization"
-              variant="outlined"
-              fullWidth
-              name="specialization"
-              value={patientData.specialization}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
-
-        <div className="mt-[20px] flex">
-          <div style={{ width: "50%" }}>
-            <TextField
-              label="Phone No."
-              variant="outlined"
-              fullWidth
-              name="phone_no"
-              value={patientData.phone_no}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div style={{ marginLeft: 20, width: "50%" }}>
-            <TextField
-              label="CNIC"
-              variant="outlined"
-              fullWidth
-              name="cnic"
-              value={patientData.cnic}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
-
-        <div className="mt-[20px] flex">
-          <div style={{ width: "50%" }}>
-            <TextField
               label="Email"
               variant="outlined"
               fullWidth
@@ -151,69 +108,24 @@ const AddEditDoctors = () => {
               required
             />
           </div>
-
-          <div style={{ marginLeft: 20, width: "50%" }}>
-            <TextField
-              label="Qualification"
-              variant="outlined"
-              fullWidth
-              name="qualification"
-              value={patientData.qualification}
-              onChange={handleChange}
-              required
-            />
-          </div>
         </div>
 
         <div className="mt-[20px] flex">
-        <div style={{  width: "25%" }}>
+        <div style={{ width: "50%" }}>
             <TextField
-              label="Pay"
+              label="Password"
               variant="outlined"
               fullWidth
-              type="number"
-              name="pay"
-              value={patientData.pay}
+              name="password"
+              type="password"
+              value={patientData.password}
               onChange={handleChange}
               required
             />
           </div>
+          
+        </div>
 
-          <div style={{ marginLeft: 20, width: "25%" }}>
-            <TextField
-              label="Experience"
-              variant="outlined"
-              fullWidth
-              type="number"
-              name="experience"
-              value={patientData.experience}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          </div>
-
-          {/* <div>
-            <FormControl fullWidth>
-              <InputLabel>Assigned Doctor</InputLabel>
-              <Select
-                label="Assigned Doctor"
-                name="assigned_doctor"
-                value={patientData.assigned_doctor} // Set the selected doctor's ID
-                onChange={handleChange}
-                required
-              >
-                {doctorData.map((doctors) => (
-                  <MenuItem key={doctors.id} value={doctors.id}>
-                    {doctors.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </div> */}
-
-        
 
         <Grid container style={{ justifyContent: "center", marginTop: "30px" }}>
           <Button
@@ -232,4 +144,4 @@ const AddEditDoctors = () => {
   );
 };
 
-export default AddEditDoctors;
+export default AddEditHR;

@@ -9,11 +9,11 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import patientService from "../../../Services/patientService";
+import patientService from "../../Services/patientService";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
-import doctorService from "../../../Services/doctorService";
-import staffService from "../../../Services/staffService";
+import doctorService from "../../Services/doctorService";
+import staffService from "../../Services/staffService";
 
 const AddEditStaff = () => {
   const [patientData, setPatientData] = useState({

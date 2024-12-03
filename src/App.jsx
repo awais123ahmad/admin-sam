@@ -4,15 +4,17 @@ import "./index.css";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import PortalLayout from "./Components/PortalLayout";
 import AdminPatients from "./Pages/Patients/AdminPatients";
-import Doctors from "./Pages/Admin/Doctors/Doctors";
-import Medicines from "./Pages/Admin/Medicines/Medicines";
-import AddEditDoctors from "./Pages/Admin/Doctors/AddEditDoctors";
-import RegisterUsers from "./Pages/Admin/RegisteredUsers/RegisterUsers";
-import AddEditUsers from "./Pages/Admin/RegisteredUsers/AddEditUsers";
+import Doctors from "./Pages/Doctors/Doctors";
+import Medicines from "./Pages/Medicines/Medicines";
+import RegisterUsers from "./Pages/RegisteredUsers/RegisterUsers";
+import AddEditUsers from "./Pages/RegisteredUsers/AddEditUsers";
 import LoginPage from "./Pages/Login/Login";
-import Staff from "./Pages/Admin/Staff/Staff";
-import AddEditStaff from "./Pages/Admin/Staff/AddEditStaff";
+import Staff from "./Pages/Staff/Staff";
+import AddEditStaff from "./Pages/Staff/AddEditStaff";
 import AdminDashboard from "./Pages/Admin_Dashboard/AdminDashboard";
+import AddEditDoctors from "./Pages/Doctors/AddEditDoctors";
+import AddEditHR from "./Pages/RegisteredUsers/AddEditHR";
+import AddEditDispenser from "./Pages/RegisteredUsers/AddEditDispenser";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -21,15 +23,17 @@ function App() {
     <BrowserRouter>
       <PortalLayout>
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<LoginPage />} />
 
           <Route path="admin/staff" element={<Staff />} />
-          <Route path="/admin/admindasboard" element={<AdminDashboard />} />
+          <Route path="/admindasboard" element={<AdminDashboard />} />
 
           <Route path="admin/staff/AddEditStaff" element={<AddEditStaff />} />
 
           <Route path="admin/register" element={<RegisterUsers />} />
-          <Route path="admin/register/AddEditUser" element={<AddEditUsers />} />
+          <Route path="admin/register/AddEditUser" element={<AddEditUsers/>} />
+          <Route path="admin/register/AddEditHR" element={<AddEditHR/>} />
+          <Route path="admin/register/AddEditDispenser" element={< AddEditDispenser/>} />
 
           <Route path="admin/doctor" element={<Doctors />} />
           <Route

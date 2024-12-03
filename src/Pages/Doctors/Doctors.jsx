@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Tooltip, Modal, Box, Typography, CircularProgress } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
-import PaginationComponent from "../../../Components/PaginationComponent";
-import patientService from "../../../Services/patientService";
+import PaginationComponent from "../../Components/PaginationComponent";
+import patientService from "../../Services/patientService";
 import toast from 'react-hot-toast';
-import doctorService from "../../../Services/doctorService";
+import doctorService from "../../Services/doctorService";
 import DoctorDetailsModal from "./DoctorDetailsModal";
 
 
