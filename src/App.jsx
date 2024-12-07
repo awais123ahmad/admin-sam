@@ -20,7 +20,7 @@ function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <BrowserRouter basename="/dispenser">
+    <BrowserRouter basename="/admin">
       <PortalLayout>
         <Routes>
           <Route path="/" element={<LoginPage />} />
