@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Button, Divider, Grid, TextField, IconButton, MenuItem, Select, InputLabel, FormControl } from "@mui/material";
+import { Button, Grid, TextField, IconButton } from "@mui/material";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import userService from "../../Services/userService"; // Adjust path as needed
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import loginService from "../../Services/loginService";
+import Cookies from 'js-cookie';
 
 const Login = () => {
   const [loginData, setLoginData] = useState({
@@ -13,6 +13,7 @@ const Login = () => {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -26,26 +27,18 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await loginService.login(loginData); // Assume login method in userService
+      const response = await loginService.login(loginData);
       toast.success("Login successful!");
-      localStorage.setItem("user", JSON.stringify(response)); // Save user info in localStorage
-      navigate("/admindasboard"); // Redirect to admin or dashboard page
+  
+      // Set authentication cookie
+      Cookies.set("XIOQUNVU1RPTUVSLUFVVEhFTlRJQ0FUSU9OIMSLQ1JFVC1LRVk=", response.token, { expires: 1 });
+  
+      // Redirect to dashboard
+      navigate("/admindasboard");
     } catch (error) {
       toast.error(error.message || "Login failed. Please try again.");
     }
   };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await loginService.login(); // Use loginService's login method
-  //     toast.success("Login successful!");
-  //     localStorage.setItem("user", JSON.stringify(response)); // Save user info in localStorage
-  //     navigate("/dashboard"); // Redirect to admin or dashboard page
-  //   } catch (error) {
-  //     toast.error(error.message || "Login failed. Please try again.");
-  //   }
-  // };
 
   // Toggle password visibility
   const handleClickShowPassword = () => {
@@ -104,25 +97,6 @@ const Login = () => {
                       />
                     </div>
 
-                    {/* <div className="relative top-8">
-                      <FormControl fullWidth required>
-                        <InputLabel id="role-label">Role</InputLabel>
-                        <Select
-                          labelId="role-label"
-                          id="role-select"
-                          value={loginData.role}
-                          name="role"
-                          onChange={handleChange}
-                          label="Role"
-                          fullWidth
-                          className="peer placeholder-transparent h-14 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-rose-600"
-                        >
-                          <MenuItem value="admin">Admin</MenuItem>
-                          <MenuItem value="dispenser">Dispenser</MenuItem>
-                          <MenuItem value="patient">Patient</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </div> */}
                     {/* Submit Button */}
                     <div className="relative top-6">
                       <Grid container style={{ justifyContent: "center", marginTop: "30px" }}>
@@ -150,5 +124,3 @@ const Login = () => {
 };
 
 export default Login;
-
-

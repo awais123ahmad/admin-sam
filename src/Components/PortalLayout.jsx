@@ -25,6 +25,7 @@ import {
 } from "../Utills/Constants";
 //import { useDispatch } from "react-redux";
 import { MedicalInformation, PeopleAltRounded } from "@mui/icons-material";
+import { RiFirstAidKitFill } from "react-icons/ri";
 
 const drawerWidth = 240;
 
@@ -140,6 +141,15 @@ export default function PortalLayout({ children }) {
     }
   }, []);
 
+  const handleLogout = () => {
+    // Clear session storage
+    sessionStorage.removeItem(SESSION_IS_AUTHENTICATED);
+    sessionStorage.removeItem(SESSION_USERINFO);
+
+    // Navigate to the login page
+    navigate("/");
+  };
+
   //const dispatch = useDispatch();
   console.log("user info", sessionStorage.getItem(SESSION_USERINFO));
 
@@ -218,7 +228,7 @@ export default function PortalLayout({ children }) {
                           <div>
                             <div
                               className="flex text-gray-600 gap-6 p-2 cursor-pointer"
-                              //onClick={() => handleLogout()}
+                              onClick={() => handleLogout()}
                             >
                               <PowerSettingsNewIcon className="text-gray-600" />
                               <h1>LogOut</h1>
@@ -376,7 +386,7 @@ export default function PortalLayout({ children }) {
                           : " mr-2 rounded-md"
                       }  ${open ? "ml-6" : "ml-0"}  `}
                     >
-                      <FaFirstAid
+                      <MedicalInformation
                         className={`!text-5xl ${
                           open ? "mr-4" : "mr-auto ml-2 hover:!text-[3.5rem]"
                         } rounded-full p-[12px] ml-[-1.2rem] ${
@@ -410,7 +420,7 @@ export default function PortalLayout({ children }) {
                           : " mr-2 rounded-md"
                       }  ${open ? "ml-6" : "ml-0"}  `}
                     >
-                      <FaUserInjured
+                      <MedicalInformation
                         className={`!text-5xl ${
                           open ? "mr-4" : "mr-auto ml-2 hover:!text-[3.5rem]"
                         } rounded-full p-[12px] ml-[-1.2rem] ${
