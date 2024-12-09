@@ -192,11 +192,7 @@ export default function PortalLayout({ children }) {
                                 </div> */}
 
                 <div className="ml-auto flex gap-2 items-center">
-                  <NotificationsIcon
-                    className="text-gray-600 "
-                    sx={{ fontSize: 20 }}
-                  />
-
+                  
                   <div className="flex items-center gap-2">
                     <AccountCircleIcon
                       className="text-gray-600 "

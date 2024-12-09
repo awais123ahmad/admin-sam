@@ -44,13 +44,13 @@ const MedicineDetailsModal = ({ open, onClose, medicine }) => {
                 <tr className="text-sm w-full">
                   <td className="py-2 border-t-[1px] font-bold px-5">Price per Unit</td>
                   <td className="py-2 border-t-[1px] text-[13px]">
-                    {medicine.price_per_unit}
+                    {medicine.price}
                   </td>
                 </tr>
                 <tr className="text-sm w-full">
                   <td className="py-2 border-t-[1px] font-bold px-5">Total Value</td>
                   <td className="py-2 border-t-[1px] text-[13px]">
-                    {medicine.quantity_in_stock * medicine.price_per_unit}
+                    {medicine.quantity_in_stock * medicine.price}
                   </td>
                 </tr>
                 <tr className="text-sm w-full">
@@ -62,7 +62,7 @@ const MedicineDetailsModal = ({ open, onClose, medicine }) => {
                 <tr className="text-sm w-full">
                   <td className="py-2 border-t-[1px] font-bold px-5">Supplier</td>
                   <td className="py-2 border-t-[1px] text-[13px]">
-                    {medicine.supplier}
+                    {medicine.supplier_name}
                   </td>
                 </tr>
               </>
