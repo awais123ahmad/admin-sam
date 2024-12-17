@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import "./index.css";
-import { BrowserRouter, Route, Routes, useNavigate, useLocation } from "react-router-dom";
+import { Navigate, BrowserRouter, Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import PortalLayout from "./Components/PortalLayout";
 import Doctors from "./Pages/Doctors/Doctors";
 import Medicines from "./Pages/Medicines/Medicines";
@@ -18,59 +18,56 @@ import Cookies from 'js-cookie';
 import Patients from "./Pages/Patients/Patients";
 import PatientDetails from "./Pages/Patients/PatientDetails";
 import AddEditPatient from "./Pages/Patients/AddEditPatient";
+import { Login } from "@mui/icons-material";
+
 
 function App() {
-  const [count, setCount] = useState(0);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const location = useLocation();
-  const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const location = useLocation()
+  const navigate = useNavigate()
 
-  // Redirect to login if not authenticated
   useEffect(() => {
-    if (!isAuthenticated && location.pathname !== "/") {
-      navigate("/");
+    if (!isAuthenticated) {
+      navigate('/login')
     }
-  }, [isAuthenticated, location.pathname, navigate]);
+  }, [isAuthenticated])
 
-  // Check authentication status on page load
   useEffect(() => {
-    setIsAuthenticated(
-      Boolean(Cookies.get("XIOQUNVU1RPTUVSLUFVVEhFTlRJQ0FUSU9OIMSLQ1JFVC1LRVk="))
-    );
-  }, [location.pathname]);
+    const token = Cookies.get("XIOQUNVU1RPTUVSLUFVVEhFTlRJQ0FUSU9OIMSLQ1JFVC1LRVk=");
+    if (token) {
+      setIsAuthenticated(true);  // User is authenticated
+    } else {
+      setIsAuthenticated(false); // No token found, set to false
+    }
+  }, [location.pathname]);  // Check authentication on path change
 
   return (
 
-      <PortalLayout>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
-
-          <Route path="admin/staff" element={<Staff />} />
-          <Route path="/admindasboard" element={<AdminDashboard />} />
-
-          <Route path="admin/staff/AddEditStaff" element={<AddEditStaff />} />
-
-          <Route path="admin/register" element={<RegisterUsers />} />
-          <Route path="admin/register/AddEditUser" element={<AddEditUsers/>} />
-          <Route path="admin/register/AddEditHR" element={<AddEditHR/>} />
-          <Route path="admin/register/AddEditDispenser" element={< AddEditDispenser/>} />
-
-          <Route path="admin/doctor" element={<Doctors />} />
-          <Route path="admin/doctor/AddEditDoctor" element={<AddEditDoctors />}
-          />
-          <Route path="/admin/patients" element={<Patients />} />
-          <Route path="/admin/patients/:id" element={<PatientDetails />} />
-          <Route path="/admin/patients/AddEdit" element={<AddEditPatient />} />
+          <Route path="/" element={<Navigate to="/admin" replace />} />
+          <Route path="/admin" element={isAuthenticated ? <PortalLayout> <AdminDashboard /> </PortalLayout> : <Navigate to="/login" />} />
           
-          <Route path="/admin/medicines" element={<Medicines />} />
+          <Route path="/login" element={!isAuthenticated ? <LoginPage /> : <Navigate to="/admin" />} />
 
+          <Route path="/admin/staff" element={isAuthenticated ? <PortalLayout> <Staff /> </PortalLayout> : <Navigate to="/login" />} />
+          <Route path="/admin/staff/AddEditStaff" element={isAuthenticated ? <PortalLayout> <AddEditStaff /> </PortalLayout> : <Navigate to="/login" />} />
 
+          <Route path="/admin/register" element={isAuthenticated ? <PortalLayout> <RegisterUsers /> </PortalLayout> : <Navigate to="/login" />} />
+          <Route path="/admin/register/AddEditUser" element={isAuthenticated ? <PortalLayout> <AddEditUsers /> </PortalLayout> : <Navigate to="/login" />} />
+          <Route path="/admin/register/AddEditHR" element={isAuthenticated ? <PortalLayout> <AddEditHR /> </PortalLayout> : <Navigate to="/login" />} />
+          <Route path="/admin/register/AddEditDispenser" element={isAuthenticated ? <PortalLayout> <AddEditDispenser /> </PortalLayout> : <Navigate to="/login" />} />
+   
 
+          <Route path="/admin/doctor" element={isAuthenticated ? <PortalLayout> <Doctors /> </PortalLayout> : <Navigate to="/login" />} />
+          <Route path="/admin/doctor/AddEditDoctor" element={isAuthenticated ? <PortalLayout> <AddEditDoctors /> </PortalLayout> : <Navigate to="/login" />} />
+   
+          <Route path="/admin/patients" element={isAuthenticated ? <PortalLayout> <Patients /> </PortalLayout> : <Navigate to="/login" />} />
+          <Route path="/admin/patients/:id" element={isAuthenticated ? <PortalLayout> <PatientDetails /> </PortalLayout> : <Navigate to="/login" />} />
+          <Route path="/admin/patients/AddEdit" element={isAuthenticated ? <PortalLayout> <AddEditPatient /> </PortalLayout> : <Navigate to="/login" />} />
 
-
+          <Route path="/admin/medicines" element={isAuthenticated ? <PortalLayout> <Medicines /> </PortalLayout> : <Navigate to="/login" />} />
         </Routes>
-      </PortalLayout>
- 
+
   );
 }
 

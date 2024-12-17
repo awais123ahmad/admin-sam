@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaArrowUp, FaDollarSign, FaWallet } from "react-icons/fa";
 import { MdCreditScore, MdOutlineAutoGraph } from "react-icons/md";
+import toast from "react-hot-toast";
 import "./Style.css";
 import {
   Area,
   AreaChart,
   Bar,
   BarChart,
+  ComposedChart,
   Cell,
   Legend,
   Pie,
@@ -26,53 +28,12 @@ import { RiExchangeDollarLine } from "react-icons/ri";
 import { BsBank2 } from "react-icons/bs";
 import { IoMdCash } from "react-icons/io";
 import { FaMoneyCheckDollar, FaSackDollar } from "react-icons/fa6";
+import doctorService from "../../Services/doctorService";
+import { PeopleAltOutlined, Shop, ShoppingBag } from "@mui/icons-material";
+import patientService from "../../Services/patientService";
+import saleService from "../../Services/saleService";
+import { format } from "date-fns";
 
-const data = [
-  {
-    amount: "5,000",
-    name: "Today Revenue",
-    icon: RiExchangeDollarLine,
-    iconColor: "#F7B229",
-    bgColor: "#F9EFE1",
-  },
-  {
-    amount: "5,000",
-    name: "Today Profit",
-    icon: FaDollarSign,
-    iconColor: "#6356FD",
-    bgColor: "#E2EDFD",
-  },
-  {
-    amount: "5,000",
-    name: "Today Sales",
-    icon: FaWallet,
-    iconColor: " #66DAFB ",
-    bgColor: "#E2F7FB",
-  },
-  {
-    amount: "5,000",
-    name: "This Month Revenue",
-    icon: FaSackDollar,
-    iconColor: " #EF70B2 ",
-    bgColor: "#E7EBF2",
-  },
-  {
-    amount: "5,000",
-    name: "This Month Profit",
-    icon: FaMoneyCheckDollar,
-    iconColor: " #F56C22 ",
-    bgColor: "#FCEFE8",
-  },
-  {
-    amount: "5,000",
-    name: "This Month Sales",
-    icon: MdOutlineAutoGraph,
-    iconColor: " #34B237 ",
-    bgColor: "#DBF7E1",
-  },
-  // { amount: '5,000', name: 'Total Revenue', icon: FaDollarSign, iconColor: ' #A856FC ', bgColor: '#EBF0FD' },
-  // { amount: '5,000', name: 'Total Revenue', icon: FaDollarSign, iconColor: ' #F9BF7D ', bgColor: '#F7F1F4' }
-];
 
 const recent = [
   {
@@ -156,25 +117,6 @@ const recent = [
     date: "11/12/2023",
   },
 ];
-const chart = [
-  { name: "1", uv: 15.5, pv: 24, amt: 24 },
-  { name: "2", uv: 20, pv: 24, amt: 24 },
-  { name: "3", uv: 12, pv: 24, amt: 24 },
-  { name: "4", uv: 24, pv: 24, amt: 24 },
-  { name: "5", uv: 36, pv: 24, amt: 24 },
-  { name: "6", uv: 17, pv: 24, amt: 24 },
-  { name: "2", uv: 40, pv: 24, amt: 24 },
-  { name: "3", uv: 10, pv: 24, amt: 24 },
-  { name: "4", uv: 2, pv: 24, amt: 24 },
-  { name: "5", uv: 25, pv: 24, amt: 24 },
-  { name: "6", uv: 10, pv: 24, amt: 24 },
-  { name: "4", uv: 24, pv: 24, amt: 24 },
-  { name: "5", uv: 36, pv: 24, amt: 24 },
-  { name: "6", uv: 17, pv: 24, amt: 24 },
-  { name: "2", uv: 40, pv: 24, amt: 24 },
-  { name: "3", uv: 10, pv: 24, amt: 24 },
-  { name: "4", uv: 2, pv: 24, amt: 24 },
-];
 
 const data01 = [
   { name: "Group A", value: 400 },
@@ -198,14 +140,13 @@ const renderActiveShape = (props) => {
     payload,
   } = props;
 
-
   return (
     <g>
       <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
         {payload.name}
       </text>
-      <text  y={'96%'} x={cx} dx={-40} style={{ fontSize:18  }} >
-       Rs. {payload.value}
+      <text y={"96%"} x={cx} dx={-40} style={{ fontSize: 18 }}>
+        Rs. {payload.value}
       </text>
       <Sector
         cx={cx}
@@ -317,55 +258,379 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 const AdminDashboard = () => {
   const [select, setselect] = useState(false);
   const [activeIndex, setactiveIndex] = useState(0);
+  const [doctors, setDoctors] = useState([]);
+  const [patients, setPatients] = useState([]);
+  const [sales, setSales] = useState([]);
+  const [todayProfit, setTodayProfit] = useState([]);
+  const [salesInvoices, setSalesInvoices] = useState([]);
+  const [monthSales, setMonthSales] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const [price , setPrice] = useState('');
+  const [price, setPrice] = useState("");
+
+  const formatDate = (dateString) => {
+    if (!dateString) return ""; // Handle null or undefined
+    const options = { year: "numeric", month: "short", day: "numeric" };
+    return new Date(dateString).toLocaleDateString("en-US", options);
+  };
+
+  useEffect(() => {
+    const getDoctors = async () => {
+      try {
+        setLoading(true);
+        const response = await doctorService.fetchTotal();
+        console.log(response);
+        setDoctors(response.total);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        toast.error("Error fetching doctors");
+      }
+    };
+    getDoctors();
+  }, []);
+
+  useEffect(() => {
+    const getPatients = async () => {
+      try {
+        setLoading(true);
+        const response = await patientService.fetchTotal();
+        console.log(response);
+        setPatients(response.total);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        toast.error("Error fetching doctors");
+      }
+    };
+    getPatients();
+  }, []);
+
+  useEffect(() => {
+    const getSales = async () => {
+      try {
+        setLoading(true);
+        const response = await saleService.fetchTotal();
+        console.log(response);
+        setSales(response.total);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        toast.error("Error fetching doctors");
+      }
+    };
+    getSales();
+  }, []);
+
+  useEffect(() => {
+    const getTodayProfit = async () => {
+      try {
+        setLoading(true);
+        const response = await saleService.fetchTodayProfit();
+        console.log(response);
+        setTodayProfit(response.profit[0]);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        toast.error("Error fetching Sales");
+      }
+    };
+    getTodayProfit();
+  }, []);
+
+
+  useEffect(() => {
+    const getMonthSales = async () => {
+      try {
+        setLoading(true);
+        const response = await saleService.monthSales();
+        console.log(response);
+        setMonthSales(response.sales);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        toast.error("Error fetching Sales");
+      }
+    };
+    getMonthSales();
+  }, []);
+
+  useEffect(() => {
+    const getInvoiceSales = async () => {
+      try {
+        setLoading(true);
+        const response = await saleService.fetchInvoiceSales();
+        console.log(response);
+        setSalesInvoices(response.sales);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        toast.error("Error fetching doctors");
+      }
+    };
+    getInvoiceSales();
+  }, []);
+
 
   return (
     <div>
       <div className=" flex max-md:flex-col gap-[2%] ">
         <div className="w-[70%] max-md:w-[100%] ">
           <div className="grid grid-cols-3 gap-[20px] max-md:grid-cols-2 max-md:gap-[40px]">
-            {data?.map((value) => (
+           
+            <div
+              style={{
+                display: "flex",
+                backgroundColor: "#fff",
+                borderRadius: 10,
+                width: "100%",
+                boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+                gap: 20,
+              }}
+            >
               <div
                 style={{
+                  width: "20%",
+                  backgroundColor: "#F7E3CC",
+                  borderTopLeftRadius: 10,
+                  borderBottomLeftRadius: 10,
+                  alignItems: "center",
+                  alignContent: "center",
                   display: "flex",
-                  backgroundColor: "#fff",
-                  borderRadius: 10,
-                  width: "100%",
-                  boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
-                  gap: 20,
+                  justifyContent: "center",
                 }}
+                className="py-2"
               >
-                <div
-                  style={{
-                    width: "20%",
-                    backgroundColor: value.bgColor,
-                    alignItems: "center",
-                    alignContent: "center",
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                  className="py-2"
-                >
-                  {<value.icon size={29} color={value.iconColor} />}
-                </div>
-                <div className="py-6">
-                  <p style={{ fontSize: 20, fontWeight: "600" }}>
-                    Rs.{value?.amount}
-                  </p>
-                  <p
-                    style={{
-                      fontSize: 14,
-                      marginTop: -8,
-                      fontWeight: "500",
-                      color: "gray",
-                    }}
-                  >
-                    {value?.name}
-                  </p>
-                </div>
+                <PeopleAltOutlined />
               </div>
-            ))}
+              <div className="py-6">
+                <p style={{ fontSize: 20, fontWeight: "600" }}>
+                  {loading ? "Loading..." : doctors}
+                </p>
+                <p
+                  style={{
+                    fontSize: 14,
+                    marginTop: 2,
+                    fontWeight: "500",
+                    color: "gray",
+                  }}
+                >
+                  Total Doctors
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                backgroundColor: "#fff",
+                borderRadius: 10,
+                width: "100%",
+                boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+                gap: 20,
+              }}
+            >
+              <div
+                style={{
+                  width: "20%",
+                  backgroundColor: "#F9ECD9",
+                  borderTopLeftRadius: 10,
+                  borderBottomLeftRadius: 10,
+                  alignItems: "center",
+                  alignContent: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+                className="py-2"
+              >
+                <PeopleAltOutlined />
+              </div>
+              <div className="py-6">
+                <p style={{ fontSize: 20, fontWeight: "600" }}>
+                  {loading ? "Loading..." : patients}
+                </p>
+                <p
+                  style={{
+                    fontSize: 14,
+                    marginTop: 2,
+                    fontWeight: "500",
+                    color: "gray",
+                  }}
+                >
+                  Total Patients
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                backgroundColor: "#fff",
+                borderRadius: 10,
+                width: "100%",
+                boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+                gap: 20,
+              }}
+            >
+              <div
+                style={{
+                  width: "20%",
+                  backgroundColor: "#FFFAE6",
+                  borderTopLeftRadius: 10,
+                  borderBottomLeftRadius: 10,
+                  alignItems: "center",
+                  alignContent: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+                className="py-2"
+              >
+                <ShoppingBag />
+              </div>
+              <div className="py-6">
+                <p style={{ fontSize: 20, fontWeight: "600" }}>
+                  {loading ? "Loading..." : sales}
+                </p>
+                <p
+                  style={{
+                    fontSize: 14,
+                    marginTop: 2,
+                    fontWeight: "500",
+                    color: "gray",
+                  }}
+                >
+                  Total Sales
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                backgroundColor: "#fff",
+                borderRadius: 10,
+                width: "100%",
+                boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+                gap: 20,
+              }}
+            >
+              <div
+                style={{
+                  width: "20%",
+                  backgroundColor: "#F7CEE2",
+                  borderTopLeftRadius: 10,
+                  borderBottomLeftRadius: 10,
+                  alignItems: "center",
+                  alignContent: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+                className="py-2"
+              >
+                <ShoppingBag />
+              </div>
+              <div className="py-6">
+                <p style={{ fontSize: 20, fontWeight: "600" }}>
+                Rs:{loading ? "Loading..." : todayProfit.profit}
+                </p>
+                <p
+                  style={{
+                    fontSize: 14,
+                    marginTop: 2,
+                    fontWeight: "500",
+                    color: "gray",
+                  }}
+                >
+                  Today {todayProfit.profit_status}
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                backgroundColor: "#fff",
+                borderRadius: 10,
+                width: "100%",
+                boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+                gap: 20,
+              }}
+            >
+              <div
+                style={{
+                  width: "20%",
+                  backgroundColor: "#CCCAF0",
+                  borderTopLeftRadius: 10,
+                  borderBottomLeftRadius: 10,
+                  alignItems: "center",
+                  alignContent: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+                className="py-2"
+              >
+                <ShoppingBag />
+              </div>
+              <div className="py-6">
+                <p style={{ fontSize: 20, fontWeight: "600" }}>
+                  Rs:{loading ? "Loading..." : todayProfit.total_sales}
+                </p>
+                <p
+                  style={{
+                    fontSize: 14,
+                    marginTop: 2,
+                    fontWeight: "500",
+                    color: "gray",
+                  }}
+                >
+                  Today Sales
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                backgroundColor: "#fff",
+                borderRadius: 10,
+                width: "100%",
+                boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+                gap: 20,
+              }}
+            >
+              <div
+                style={{
+                  width: "20%",
+                  backgroundColor: "#CFDFEF",
+                  borderTopLeftRadius: 10,
+                  borderBottomLeftRadius: 10,
+                  alignItems: "center",
+                  alignContent: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+                className="py-2"
+              >
+                <ShoppingBag />
+              </div>
+              <div className="py-6">
+                <p style={{ fontSize: 20, fontWeight: "600" }}>
+                Rs:{loading ? "Loading..." : todayProfit.total_purchases}
+                </p>
+                <p
+                  style={{
+                    fontSize: 14,
+                    marginTop: 2,
+                    fontWeight: "500",
+                    color: "gray",
+                  }}
+                >
+                  Today Purchases
+                </p>
+              </div>
+            </div>
+            
+                    
           </div>
         </div>
 
@@ -406,30 +671,39 @@ const AdminDashboard = () => {
           className="areachart"
         >
           <h4 className="py-2 font-[600]">Monthly Sales</h4>
+
           <div className="recentMonth">
-            <ResponsiveContainer width="100%" height={400}>
-              <AreaChart
-                data={chart}
-                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-              >
-                <defs>
-                  <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="90%" stopColor="#3F99F2" stopOpacity={0.1} />
-                  </linearGradient>
-                </defs>
-                <XAxis dataKey="name" />
-                <YAxis />
-                {/* <CartesianGrid strokeDasharray="1 1" /> */}
-                <Tooltip />
-                <Area
-                  type="monotone"
-                  dataKey="uv"
-                  stroke="#3F99F2"
-                  fillOpacity={1}
-                  fill="url(#colorUv)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
+            {loading ? (
+              <div>Loading...</div>
+            ) : (
+              <ResponsiveContainer width="100%" height={400}>
+                <AreaChart
+                  data={monthSales}
+                  margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                >
+                  <defs>
+                    <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                      <stop
+                        offset="100%"
+                        stopColor="#3F99F2"
+                        stopOpacity={0.1}
+                      />
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="sale_date" />
+                  <YAxis domain={[0, "dataMax + 10000"]} />{" "}
+                  {/* Set dynamic range */}
+                  <Tooltip />
+                  <Area
+                    type="monotone" /* Ensure the type is correct */
+                    dataKey="total_amount"
+                    stroke="#3F99F2"
+                    fillOpacity={1}
+                    fill="url(#colorUv)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            )}
           </div>
         </div>
         <div
@@ -438,25 +712,27 @@ const AdminDashboard = () => {
         >
           <h4 className="py-2 font-[600]">Recent Invoices</h4>
           <div className="recent" style={{}}>
-            {recent?.map((item) => (
+            {salesInvoices?.map((item) => (
               <div className="rounded-lg bg-white flex items-center mx-auto mt-4 border-l-4 border-green-500 shadow-md">
                 <div className="flex flex-row p-2  w-full items-center">
                   <div className="mt-[4px] w-full">
                     <div className="flex justify-between">
                       <h1 className="text-gray-500 text-sm font-[600] ">
-                        {item?.date}
+                        {formatDate(item?.checkup_date)}
                       </h1>
                       <h1 className="text-gray-500 font-[600] text-sm">
-                        invoice # {item?.id}
+                        invoice # {item?.patient_id}
                       </h1>
                     </div>
-                    <p className="text-gray-500 my-[2px] font-[500] text-sm">{item?.name}</p>
+                    <p className="text-gray-500 my-[2px] font-[500] text-sm">
+                      {item?.full_name}
+                    </p>
                     <div className="flex justify-between ">
                       <div className=" text-white bg-green-500 rounded-lg text-xs py-1 px-2 w-16 text-center">
-                        {item?.status}
+                        Qty :{item?.total_quantity}
                       </div>
                       <span className="text-red-500 font-bold ">
-                        Rs.{item?.amount}
+                        Rs.{item?.total_amount}
                       </span>
                     </div>
                   </div>
@@ -483,6 +759,7 @@ const AdminDashboard = () => {
                 style={{ color: "green", marginLeft: 6 }}
               />
             </div>
+
             <div className="recieved">
               {recent?.map((item) => (
                 <div
@@ -495,11 +772,15 @@ const AdminDashboard = () => {
                   <div className="flex flex-row p-4 w-full items-center">
                     <div className=" w-full">
                       <div className="flex justify-between">
-                        <p className="font-[500] text-sm text-gray-600">{item?.date}</p>
+                        <p className="font-[500] text-sm text-gray-600">
+                          {item?.date}
+                        </p>
                         <p className="text-gray-500">CASH</p>
                       </div>
                       <div className="flex justify-between">
-                        <p className="text-[15px] font-[600] text-gray-600">{item?.name}</p>
+                        <p className="text-[15px] font-[600] text-gray-600">
+                          {item?.name}
+                        </p>
                         <div className="flex">
                           <p className="text-green-500 font-bold text-right">
                             Rs.{item?.amount}
@@ -537,11 +818,15 @@ const AdminDashboard = () => {
                   <div className="flex flex-row p-4 w-full items-center">
                     <div className=" w-full">
                       <div className="flex justify-between">
-                        <p className="font-[500] text-sm text-gray-600">{item?.date}</p>
+                        <p className="font-[500] text-sm text-gray-600">
+                          {item?.date}
+                        </p>
                         <p className="text-gray-500">CASH</p>
                       </div>
                       <div className="flex justify-between">
-                        <p className="text-[15px] font-[600] text-gray-600">{item?.name}</p>
+                        <p className="text-[15px] font-[600] text-gray-600">
+                          {item?.name}
+                        </p>
                         <div className="flex">
                           <p className="text-red-500 font-bold text-right">
                             Rs.{item?.amount}
