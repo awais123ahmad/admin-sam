@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     paddingBottom: 5,
   },
-  logo: { width: 80, height: 75 },
+  logo: { width: 80, height: 80 },
   title: { fontSize: 18, fontWeight: "bold", marginBottom:"2" },
   section: { marginBottom: 5 },
   sectionTitle: { fontSize: 14, fontWeight: "bold", marginBottom: 2 },
@@ -51,6 +51,11 @@ const styles = StyleSheet.create({
     borderColor: "#000",
     marginBottom: 5,
   },
+  // tableContainer: {
+  //   width: "70%", // Set the container width to 70% of the parent (screen/page)
+  //   alignSelf: "left", // Center the table horizontally
+  //   marginVertical: 5,
+  // },
   tableRow: {
     flexDirection: "row",
     borderBottomWidth: 1,
@@ -115,7 +120,7 @@ const styles = StyleSheet.create({
     marginVertical: 10, // Spacing around the line
   },
   marginBottomtemp: {
-    marginBottom: 10,
+    marginBottom: 5,
   },
 });
 
@@ -178,6 +183,7 @@ const PatientReport = ({ patient }) => (
           {patient.qualification}
           </Text>
 
+          
         </View>
       </View>
 
@@ -207,6 +213,7 @@ const PatientReport = ({ patient }) => (
           <Text style={styles.tableCell}>{patient.gender || "Male"}</Text>
         </View>
       </View>
+
 
       <View style={styles.section}>
         <Text style={[styles.tempName, styles.marginBottomtemp]}>Temp:</Text>
@@ -254,6 +261,3 @@ const PatientReport = ({ patient }) => (
 );
 
 export default PatientReport;
-
-
-
