@@ -95,23 +95,14 @@ const Medicines = () => {
                 <th className="py-[1%] w-[10%] text-[.8rem] text-gray-700 text-left pl-4">
                   Sr No.
                 </th>
-                <th className="py-[1%] w-[20%] text-[.8rem] text-gray-700 text-left pl-4">
+                <th className="py-[1%] w-[20%] text-[.8rem] text-gray-700 text-left">
                   Name
                 </th>
-                <th className="py-[1%] w-[10%] text-[.8rem] text-gray-700 text-left pl-4">
+                <th className="py-[1%] w-[20%] text-[.8rem] text-gray-700 text-left pl-4">
                   Quantity in Stock
                 </th>
                 <th className="py-[1%] w-[10%] text-[.8rem] text-gray-700 text-left">
                   Price per Unit
-                </th>
-                <th className="py-[1%] w-[10%] text-[.8rem] text-gray-700 text-left">
-                  Total Value
-                </th>
-                <th className="py-[1%] w-[10%] text-[.8rem] text-gray-700 text-center">
-                  Expiry Date
-                </th>
-                <th className="py-[1%] w-[20%] text-[.8rem] text-gray-700 text-center">
-                  Supplier
                 </th>
                 <th className="py-[1%] w-[10%] text-[.8rem] text-gray-700 text-center">
                   Action
@@ -125,7 +116,7 @@ const Medicines = () => {
                   className="bg-white text-gray-600 text-sm font-light border-t-[1px] border-gray-200"
                 >
                   <td className="w-[10%] text-left">
-                    <p className="font-[600] text-gray-600 text-[14px] text-center">
+                    <p className="font-[600] text-gray-600 text-[14px] text-left pl-4">
                       {index + 1 + (currentPage - 1) * itemsPerPage}
                     </p>
                   </td>
@@ -134,28 +125,17 @@ const Medicines = () => {
                       {medicine?.medicine_name}
                     </p>
                   </td>
-                  <td className="py-[1%] w-[10%] text-left pl-4">
+                  <td className="py-[1%] w-[20%] text-left pl-4">
                     <p className="font-[600] text-gray-600 text-[14px]">
                       {medicine?.quantity_in_stock}
                     </p>
                   </td>
                   <td className="w-[10%] text-left">
                     <p className="font-[600] text-gray-600 text-[14px]">
-                      {medicine?.price_per_unit}
+                      {medicine?.price}
                     </p>
                   </td>
 
-                  <td className="w-[10%] text-left">
-                    <p className="font-[600] text-gray-600 text-[14px]">
-                      {medicine?.quantity_in_stock * medicine?.price_per_unit}
-                    </p>
-                  </td>
-                  <td className="py-[2%] px-2 w-[10%] text-center">
-                    <span className="font-[400]">{formatDate(medicine?.expiry_date)}</span>
-                  </td>
-                  <td className="py-[2%] px-2 w-[20%] text-center">
-                    <span className="font-[400]">{medicine?.supplier}</span>
-                  </td>
                   <td className="py-[2%] w-[10%] text-center">
                     <button
                       className="text-[13px] font-[500] text-blue-500"

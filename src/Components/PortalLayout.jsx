@@ -8,6 +8,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import logo from "../assets/logo.png";
+import toast from "react-hot-toast";
+import Cookies from 'js-cookie';
+
 
 import { FaFirstAid, FaUserInjured } from "react-icons/fa";
 
@@ -25,6 +28,7 @@ import {
 } from "../Utills/Constants";
 //import { useDispatch } from "react-redux";
 import { MedicalInformation, PeopleAltRounded } from "@mui/icons-material";
+import { RiFirstAidKitFill } from "react-icons/ri";
 
 const drawerWidth = 240;
 
@@ -134,9 +138,19 @@ export default function PortalLayout({ children }) {
   console.log(auth);
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.removeItem('user')
+    Cookies.remove('XIOQUNVU1RPTUVSLUFVVEhFTlRJQ0FUSU9OIMSLQ1JFVC1LRVk=')
+    toast.success("Logout Successfully")
+    navigate('/login', { replace: true });
+  }
+
+  const [userEmail, setUserEmail] = useState("");
+
   useEffect(() => {
-    if (auth === "false") {
-      route("/login");
+    const email = sessionStorage.getItem("userEmail");
+    if (email) {
+      setUserEmail(email);
     }
   }, []);
 
@@ -150,7 +164,7 @@ export default function PortalLayout({ children }) {
 
   return (
     <>
-      {location.pathname === "/" ? (
+      {location.pathname === "/login" ? (
         children
       ) : (
         <>
@@ -182,11 +196,7 @@ export default function PortalLayout({ children }) {
                                 </div> */}
 
                 <div className="ml-auto flex gap-2 items-center">
-                  <NotificationsIcon
-                    className="text-gray-600 "
-                    sx={{ fontSize: 20 }}
-                  />
-
+                  
                   <div className="flex items-center gap-2">
                     <AccountCircleIcon
                       className="text-gray-600 "
@@ -218,7 +228,7 @@ export default function PortalLayout({ children }) {
                           <div>
                             <div
                               className="flex text-gray-600 gap-6 p-2 cursor-pointer"
-                              //onClick={() => handleLogout()}
+                              onClick={() => handleLogout()}
                             >
                               <PowerSettingsNewIcon className="text-gray-600" />
                               <h1>LogOut</h1>
@@ -263,10 +273,10 @@ export default function PortalLayout({ children }) {
                 <ul className={`w-[100%]`}>
                   <li>
                     <div
-                      onClick={() => route("/admindasboard")}
+                      onClick={() => route("/admin")}
                       className={`flex items-center p-2 cursor-pointer  text-gray-600 mt-3 h-[2.6rem] ${
-                        location.pathname === "/admindasboard" ||
-                        location.pathname === "/admindasboard/add"
+                        location.pathname === "/admin" ||
+                        location.pathname === "/admin/add"
                           ? "bg-gray-800 text-white mr-2 rounded-md font-[600]"
                           : " mr-2 rounded-md"
                       }  ${open ? "ml-6" : "ml-0"}  `}
@@ -275,13 +285,13 @@ export default function PortalLayout({ children }) {
                         className={`!text-5xl ${
                           open ? "mr-4" : "mr-auto ml-2 hover:!text-[3.5rem]"
                         } rounded-full p-[12px] ml-[-1.2rem] ${
-                          location.pathname === "/admindasboard"
+                          location.pathname === "/admin"
                             ? "bg-white text-gray-600"
                             : ""
                         } `}
                         sx={{
                           boxShadow:
-                            location.pathname === "/admindasboard"
+                            location.pathname === "/admin"
                               ? "2px 5px 10px rgba(0, 0, 0, 0.2)"
                               : "",
                         }}
@@ -376,7 +386,7 @@ export default function PortalLayout({ children }) {
                           : " mr-2 rounded-md"
                       }  ${open ? "ml-6" : "ml-0"}  `}
                     >
-                      <FaFirstAid
+                      <MedicalInformation
                         className={`!text-5xl ${
                           open ? "mr-4" : "mr-auto ml-2 hover:!text-[3.5rem]"
                         } rounded-full p-[12px] ml-[-1.2rem] ${
@@ -410,7 +420,7 @@ export default function PortalLayout({ children }) {
                           : " mr-2 rounded-md"
                       }  ${open ? "ml-6" : "ml-0"}  `}
                     >
-                      <FaUserInjured
+                      <MedicalInformation
                         className={`!text-5xl ${
                           open ? "mr-4" : "mr-auto ml-2 hover:!text-[3.5rem]"
                         } rounded-full p-[12px] ml-[-1.2rem] ${
